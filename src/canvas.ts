@@ -1,11 +1,11 @@
 import * as d3 from "d3";
-import {FlowchartyNode} from "./node";
-import {FlowchartyLink} from "./link";
-import {FlowchartyElements} from "./elements";
+import { FlowchartyNode } from "./node";
+import { FlowchartyLink } from "./link";
+import { FlowchartyElements } from "./elements";
 
 export class FlowchartyCanvas {
 
-  private _g: d3.Selection<d3.BaseType, any, d3.BaseType, any>|undefined;
+  private _g: d3.Selection<d3.BaseType, any, d3.BaseType, any> | undefined;
 
   private _widthInterval: number = 0;
 
@@ -20,7 +20,7 @@ export class FlowchartyCanvas {
   constructor(
     private _svg: d3.Selection<d3.BaseType, any, d3.BaseType, any>,
     private _elements: FlowchartyElements,
-    ) {
+  ) {
   }
 
   /**
@@ -45,9 +45,12 @@ export class FlowchartyCanvas {
     this._heightInterval = Number(this._svg.attr("height")) / this._elements.map.getRowCount();
     this._elements.map.getRows().map((row, rowIndex) => {
       const node = this._g.selectAll(".node").data(row);
+      // console.log(row)
+      let regexpId: RegExp = /^[A-Z]/;
       const enter = node.enter()
         .append("svg")
         .style("overflow", "visible")
+        .attr("id", d => this._elements.getNodeById(d).id)  // mexido + id
         .attr("x", (d, i) => {
           if (d === null) return 0;
           this._elements.getNodeById(d).x = this._widthInterval / 2 + this._widthInterval * i;
@@ -80,13 +83,52 @@ export class FlowchartyCanvas {
         .attr("stroke", d => this._elements.getNodeById(d).style.strokeColor)
         .attr("stroke-width", d => this._elements.getNodeById(d).style.strokeWidth);
       enter.html(function (d) {
-        return d3.select(this).html() + _this.getTextElementsWithLineBreak(_this._elements.getNodeById(d));
+        return d3.select(this).html() + _this.getTextElements(_this._elements.getNodeById(d));
+      });
+      enter.append("rect")
+        .attr("class", d => (this._elements.getNodeById(d).style.shape !== "rect" || !regexpId.test(this._elements.getNodeById(d).id) ? "_should_remove_element" : ""))
+        .attr("width", 28)
+        .attr("height", 24)
+        .attr("rx", 3)
+        .attr("ry", 3)
+        .attr("x", d => - (this._elements.getNodeById(d).style.width / 2) - 4)
+        .attr("y", d => - (this._elements.getNodeById(d).style.height / 2) - 20)
+        .attr("fill", d => this._elements.getNodeById(d).style.fillColor)
+        .attr("stroke", d => this._elements.getNodeById(d).style.strokeColor)
+        .attr("stroke-width", d => this._elements.getNodeById(d).style.strokeWidth);
+      enter.html(function (d) {
+        if (_this._elements.getNodeById(d).style.shape === "rect" && regexpId.test(_this._elements.getNodeById(d).id)) {
+          return d3.select(this).html() + _this.getTextBagElement(_this._elements.getNodeById(d));
+        } else {
+          return d3.select(this).html();
+        }
       });
     })
   }
 
   /**
    * get <text> elements for line break
+   * @param {FlowchartyNode} node
+   * @returns {string}
+   */
+  private getTextElements(node: FlowchartyNode): string {
+    if (/<([a-z]{1,}[0-9]*|[a-z]{1,}\s.*)>/i.test(node.label.name)) {
+      return this.getTextElementsWithXHTML(node);
+    }
+    return this.getTextElementsWithLineBreak(node);
+  }
+
+  /**
+   * get <text> elements with xhtml content
+   * @param {FlowchartyNode} node
+   * @returns {string}
+   */
+  private getTextElementsWithXHTML(node: FlowchartyNode): string {
+    return `<foreignObject width="${node.style.width}" height="${node.style.height}" x="${-(node.style.width / 2)}" y="${-(node.style.height / 2)}" style="margin:0;font-size:${node.label.fontSize};color:${node.label.color};line-height:1;padding:8px 2px 0 6px">${node.label.name}</foreignObject>`;
+  }
+
+  /**
+   * get <text> elements for line break/raw content
    * @param {FlowchartyNode} node
    * @returns {string}
    */
@@ -100,13 +142,21 @@ export class FlowchartyCanvas {
   }
 
   /**
+   * get <bag> element for bag content (id)
+   * @param {FlowchartyNode} node
+   * @returns {string}
+   */
+  private getTextBagElement(node: FlowchartyNode): string {
+    return `<text font-size="14px" font-weight="900" fill="${node.label.color}" dx="${-(node.style.width / 2) + 10}" dy="${-(node.style.height / 2) + 34}" text-anchor="middle" dominant-baseline="central" y="-3em">${node.id}</text>`;
+  }
+
+  /**
    * render link path by map & links
    */
   private renderLinks() {
     const _this = this;
     const link = this._g.selectAll(".link").data(this._elements.links).attr("class", "link");
-    const enter = link.enter().append("g");
-
+    const enter = link.enter().append("g").attr("id", d => `${d.sourceNodeId}__${d.targetNodeId}`);  // mexido + id
     enter.append("path")
       .style("fill", "none")
       .style("stroke", d => d.style.color)
@@ -115,12 +165,12 @@ export class FlowchartyCanvas {
       .attr("d", d => {
         const margin = d.style.connectionType === "marge" ? this._heightInterval / 5 : 0;
         const lineData = [
-          {x: this._elements.getNodeById(d.sourceNodeId).x, y: this._elements.getNodeById(d.sourceNodeId).y},
-          {x: this._elements.getNodeById(d.targetNodeId).x, y: this._elements.getNodeById(d.targetNodeId).y - margin},
+          { x: this._elements.getNodeById(d.sourceNodeId).x, y: this._elements.getNodeById(d.sourceNodeId).y },
+          { x: this._elements.getNodeById(d.targetNodeId).x, y: this._elements.getNodeById(d.targetNodeId).y - margin },
         ];
         return _this.decideLineType(d)(lineData);
       })
-      .attr("stroke-dasharray", function(d) {
+      .attr("stroke-dasharray", function (d) {
         if (!(this instanceof SVGPathElement)) return "";
         if (d.style.connectionType === "marge") {
           return [
@@ -207,7 +257,7 @@ export class FlowchartyCanvas {
    * @param {"from" | "to"} edgeType
    * @returns {number}
    */
-  private decideLinkMargin(link: FlowchartyLink, edgeType: "from"|"to") {
+  private decideLinkMargin(link: FlowchartyLink, edgeType: "from" | "to") {
     const source: FlowchartyNode = this._elements.getNodeById(link.sourceNodeId);
     const target: FlowchartyNode = this._elements.getNodeById(link.targetNodeId);
     const edge = edgeType === "to" ? target : source;
@@ -236,7 +286,7 @@ export class FlowchartyCanvas {
    * @param link
    * @returns "strait"|"stepBefore"|"stepAfter"
    */
-  private decideCurveType(link: FlowchartyLink): "strait"|"stepBefore"|"stepAfter" {
+  private decideCurveType(link: FlowchartyLink): "strait" | "stepBefore" | "stepAfter" {
     const source: FlowchartyNode = this._elements.getNodeById(link.sourceNodeId);
     const target: FlowchartyNode = this._elements.getNodeById(link.targetNodeId);
     if (link.style.curveType === "default") {
@@ -269,18 +319,18 @@ export class FlowchartyCanvas {
     }
   }
 
-  private lineStrait: d3.Line<{x: number, y:number}> = d3.line<{x: number, y:number}>()
-    .x((d: {x: number, y:number}) => (d.x))
-    .y((d: {x: number, y:number}) => (d.y));
+  private lineStrait: d3.Line<{ x: number, y: number }> = d3.line<{ x: number, y: number }>()
+    .x((d: { x: number, y: number }) => (d.x))
+    .y((d: { x: number, y: number }) => (d.y));
 
-  private lineStepBefore: d3.Line<{x: number, y:number}> = d3.line<{x: number, y:number}>()
-      .curve(d3.curveStepBefore)
-      .x((d: {x: number, y:number}) => (d.x))
-      .y((d: {x: number, y:number}) => (d.y));
+  private lineStepBefore: d3.Line<{ x: number, y: number }> = d3.line<{ x: number, y: number }>()
+    .curve(d3.curveStepBefore)
+    .x((d: { x: number, y: number }) => (d.x))
+    .y((d: { x: number, y: number }) => (d.y));
 
-  private lineStepAfter: d3.Line<{x: number, y:number}> = d3.line<{x: number, y:number}>()
+  private lineStepAfter: d3.Line<{ x: number, y: number }> = d3.line<{ x: number, y: number }>()
     .curve(d3.curveStepAfter)
-    .x((d: {x: number, y:number}) => (d.x))
-    .y((d: {x: number, y:number}) => (d.y));
+    .x((d: { x: number, y: number }) => (d.x))
+    .y((d: { x: number, y: number }) => (d.y));
 
 }

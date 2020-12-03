@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+<style>
+	body {
+		font-family: sans-serif;
+	}
+	svg g > g > text:hover {
+		cursor: pointer;
+	}
+
+	#H__H1 > text:hover, 
+	#H1__H2 > text:hover, 
+	#H2__H3 > text:hover, 
+	#H3__H4 > text:hover, 
+	#H4__H5 > text:hover,
+	#H5__H6 > text:hover,
+	#H6__H7 > text:hover,
+	#S__E > text:hover,
+	#S1__S2 > text:hover, 
+	#S2__S3 > text:hover, 
+	#S3__S4 > text:hover, 
+	#S4__S5 > text:hover,
+	#E__O > text:hover,
+	#O__N1 > text:hover,
+	#O1__O2 > text:hover,
+	#O2__O3 > text:hover,
+	#O3__O4 > text:hover,
+	#O4__O5 > text:hover,
+	#N1__N2 > text:hover,
+	#N2__N3 > text:hover,
+	#N3__N4 > text:hover,
+	#N4__N5 > text:hover {
+		stroke: #ff0000!important;
+	}
+	#H__S > text:hover,
+	#H1__h2 > text:hover, 
+	#H2__h3 > text:hover, 
+	#H3__h4 > text:hover, 
+	#H4__h5 > text:hover, 
+	#H5__h6 > text:hover, 
+	#S__S1 > text:hover,
+	#S1__s2 > text:hover, 
+	#S2__s3 > text:hover, 
+	#S3__s4 > text:hover, 
+	#S4__s5 > text:hover, 
+	#E__S1 > text:hover,
+	#O__O1 > text:hover,
+	#O1__o2 > text:hover,
+	#O2__o3 > text:hover,
+	#O3__o4 > text:hover,
+	#N1__n2 > text:hover,
+	#N2__n3 > text:hover,
+	#N3__n4 > text:hover
+	 {
+		stroke: #03c503!important;
+	}
+</style>
+</head>
+<body>
+<svg width="1280" height="720"></svg>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="./lib/flowcharty.js"></script>
+<script>
+  var data = {
+    nodes: [
+      {id: 'H', label: {name: 'H', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#5B9BD5', strokeColor: '#000000'}},
+      {id: 'H1', label: {name: 'H1', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#5B9BD5', strokeColor: '#000000'}},
+      {id: 'h2', label: {name: 'Tarefa sob\ncondição\nprogramada'}},
+      {id: 'H2', label: {name: 'H2', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#5B9BD5', strokeColor: '#000000'}},
+      {id: 'h3', label: {name: 'Tarefa de\nrestauração\nprogramada'}},
+      {id: 'H3', label: {name: 'H3', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#5B9BD5', strokeColor: '#000000'}},
+      {id: 'h4', label: {name: 'Tarefa de\ndescarte\nprogramado'}},
+      {id: 'H4', label: {name: 'H4', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#5B9BD5', strokeColor: '#000000'}},
+      {id: 'h5', label: {name: 'Tarefa de\nbusca de falha\nprogramada'}},
+      {id: 'H5', label: {name: 'H5', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#5B9BD5', strokeColor: '#000000'}},
+      {id: 'h6', label: {name: 'Reprojeto é\ncompulsório'}},
+      {id: 'H6', label: {name: 'Nenhuma\nmanutenção\nprogramada'}},
+      {id: 'H7', label: {name: 'Reprojeto\npode ser\ndesejável', color: '#F32100'}, style: {fillColor: '#FFF', strokeColor: '#F32100'}},
+
+      {id: 'S', label: {name: 'S', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F32100', strokeColor: '#000000'}},
+      {id: 'S1', label: {name: 'S1', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F32100', strokeColor: '#000000'}},
+      {id: 's2', label: {name: 'Tarefa sob\ncondição\nprogramada'}},
+      {id: 'S2', label: {name: 'S2', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F32100', strokeColor: '#000000'}},
+      {id: 's3', label: {name: 'Tarefa de\nrestauração\nprogramada'}},
+      {id: 'S3', label: {name: 'S3', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F32100', strokeColor: '#000000'}},
+      {id: 's4', label: {name: 'Tarefa de\ndescarte\nprogramado'}},
+      {id: 'S4', label: {name: 'S4', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F32100', strokeColor: '#000000'}},
+      {id: 's5', label: {name: 'Combinação\nde tarefas'}},
+      {id: 'S5', label: {name: 'Reprojeto é\ncompulsório'}},
+
+      {id: 'E', label: {name: 'E', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F32100', strokeColor: '#000000'}},
+
+      {id: 'O', label: {name: 'O', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#70AD47', strokeColor: '#000000'}},
+      {id: 'O1', label: {name: 'O1', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#70AD47', strokeColor: '#000000'}},
+      {id: 'o2', label: {name: 'Tarefa sob\ncondição\nprogramada'}},
+      {id: 'O2', label: {name: 'O2', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#70AD47', strokeColor: '#000000'}},
+      {id: 'o3', label: {name: 'Tarefa de\nrestauração\nprogramada'}},
+      {id: 'O3', label: {name: 'O3', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#70AD47', strokeColor: '#000000'}},
+      {id: 'o4', label: {name: 'Tarefa de\ndescarte\nprogramado'}},
+      {id: 'O4', label: {name: 'Nenhuma\nmanutenção\nprogramada'}},
+      {id: 'O5', label: {name: 'Reprojeto\npode ser\ndesejável'}, style: {fillColor: '#FFF'}},
+
+      {id: 'N1', label: {name: 'N1', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F6C002', strokeColor: '#000000'}},
+      {id: 'n2', label: {name: 'Tarefa sob\ncondição\nprogramada'}},
+      {id: 'N2', label: {name: 'N2', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F6C002', strokeColor: '#000000'}},
+      {id: 'n3', label: {name: 'Tarefa de\nrestauração\nprogramada'}},
+      {id: 'N3', label: {name: 'N3', dx: 0, dy: 0, textAnchor: 'middle'}, style: {shape: "rect", width: 100, height: 25, rx: 3, ry: 3, fillColor: '#F6C002', strokeColor: '#000000'}},
+      {id: 'n4', label: {name: 'Tarefa de\ndescarte\nprogramado'}},
+      {id: 'N4', label: {name: 'Nenhuma\nmanutenção\nprogramada'}},
+      {id: 'N5', label: {name: 'Reprojeto\npode ser\ndesejável'}, style: {fillColor: '#FFF'}},
+
+    ],
+    map: [
+      ['',   'H',  '',   'S',  'E', '',   'O'],
+      ['h2', 'H1', 's2', 'S1', '',  'o2', 'O1', 'n2',    'N1'],
+      ['h3', 'H2', 's3', 'S2', '',  'o3', 'O2', 'n3',    'N2'],
+      ['h4', 'H3', 's4', 'S3', '',  '',   'O3', '',    'N3'],
+      ['h5', 'H4', '',   'S4', '',  'o4', 'O4', 'n4',  'N4'],
+      ['',   'H5', 's5', 'S5', '',  '',   'O5', '',    'N5'],
+      ['h6', 'H6'],
+      ['',   'H7'],
+    ],
+    links: [
+      {source: 'H', target: 'H1', label: { class:"xxx",name: 'NÃO', dy: 30}},
+      {source: 'H1', target: 'h2', label: {name: 'SIM', dx: -80}},
+      {source: 'H1', target: 'H2', label: {name: 'NÃO', dy: 30}},
+      {source: 'H2', target: 'h3', label: {name: 'SIM', dx: -80}},
+      {source: 'H2', target: 'H3', label: {name: 'NÃO', dy: 30}},
+      {source: 'H3', target: 'h4', label: {name: 'SIM', dx: -80}},
+      {source: 'H3', target: 'H4', label: {name: 'NÃO', dy: 30}},
+      {source: 'H4', target: 'h5', label: {name: 'SIM', dx: -80}},
+      {source: 'H4', target: 'H5', label: {name: 'NÃO', dy: 30}},
+      {source: 'H5', target: 'h6', label: {name: 'SIM', dx: -80}, style: {curveType: 'stepAfter'}},
+      {source: 'H5', target: 'H6', label: {name: 'NÃO', dy: 30}},
+      {source: 'H6', target: 'H7', style: {color: '#F32100'}},
+
+      {source: 'H', target: 'S', label: {name: 'SIM', dx: 60}},
+
+      {source: 'S', target: 'E', label: {name: 'NÃO', dx: 60}},
+      {source: 'S', target: 'S1', label: {name: 'SIM', dy: 30}},
+      {source: 'S1', target: 's2', label: {name: 'SIM', dx: -80}},
+      {source: 'S1', target: 'S2', label: {name: 'NÃO', dy: 30}},
+      {source: 'S2', target: 's3', label: {name: 'SIM', dx: -80}},
+      {source: 'S2', target: 'S3', label: {name: 'NÃO', dy: 30}},
+      {source: 'S3', target: 's4', label: {name: 'SIM', dx: -80}},
+      {source: 'S3', target: 'S4', label: {name: 'NÃO', dy: 30}},
+      {source: 'S4', target: 's5', label: {name: 'SIM', dx: -80}, style: {curveType: 'stepAfter'}},
+      {source: 'S4', target: 'S5', label: {name: 'NÃO', dy: 30}},
+
+      {source: 'E', target: 'S1', label: {name: 'SIM', dy: 30}},
+
+      {source: 'E', target: 'O', label: {name: 'NÃO', dx: 60}},
+
+      {source: 'O', target: 'O1', label: {name: 'SIM', dy: 30}},
+      {source: 'O1', target: 'o2', label: {name: 'SIM', dx: -80}},
+      {source: 'O1', target: 'O2', label: {name: 'NÃO', dy: 30}},
+      {source: 'O2', target: 'o3', label: {name: 'SIM', dx: -80}},
+      {source: 'O2', target: 'O3', label: {name: 'NÃO', dy: 30}},
+      {source: 'O3', target: 'o4', label: {name: 'SIM', dx: -80}, style: {curveType: 'stepAfter'}},
+      {source: 'O3', target: 'O4', label: {name: 'NÃO', dy: 30}},
+      {source: 'O4', target: 'O5'},
+
+      {source: 'O', target: 'N1', label: {name: 'NÃO', dy: -10, dx: 60}},
+      {source: 'N1', target: 'n2', label: {name: 'SIM', dx: -80}},
+      {source: 'N1', target: 'N2', label: {name: 'NÃO', dy: 30}},
+      {source: 'N2', target: 'n3', label: {name: 'SIM', dx: -80}},
+      {source: 'N2', target: 'N3', label: {name: 'NÃO', dy: 30}},
+      {source: 'N3', target: 'n4', label: {name: 'SIM', dx: -80}, style: {curveType: 'stepAfter'}},
+      {source: 'N3', target: 'N4', label: {name: 'NÃO', dy: 30}},
+      {source: 'N4', target: 'N5'},
+
+    ]
+  };
+
+	var vw = parseInt($('body > svg').attr('width'),10);
+	var vh = parseInt($('body > svg').attr('height'),10);
+
+	var decision = function(track, links) {
+		var D2 = '';
+		var E2 = '';
+		var F2 = '';
+		var G2 = '';
+		var H2 = '-';
+		var I2 = '';
+		var J2 = '';
+		var K2 = '';
+		var L2 = '';
+		var M2 = '';
+		var N2 = '';
+
+		links.forEach(function(x) { 
+				var i = track.indexOf(x.source.concat('__', x.target));
+				if(i !== -1 && x.label) {
+						if(x.source === 'H') D2 = x.label.name[0];
+						if(x.source === 'S') E2 = x.label.name[0];
+						if(x.source === 'E') F2 = x.label.name[0];
+						if(x.source === 'O') G2 = x.label.name[0];
+						if(x.source[1] === '1') I2 = x.label.name[0];
+						if(x.source[1] === '2') J2 = x.label.name[0];
+						if(x.source[1] === '3') K2 = x.label.name[0];
+						if(x.source === 'H4') L2 = x.label.name[0];
+						if(x.source === 'H5') M2 = x.label.name[0];
+						if(x.source === 'S4') N2 = x.label.name[0];
+				}
+		});
+				
+		var r = {
+			CONSEQUENCIAS_DA_FALHA: '',
+			TAREFA_PROPOSTA: ''
+		};
+
+		r.CONSEQUENCIAS_DA_FALHA = 
+			(D2==="N") 
+				? "FALHAS OCULTAS"
+				: (D2==="S" && E2==="S")
+					? "CONSEQUÊNCIAS DE SEGURANÇA"
+					: (D2==="S" && E2==="N" && F2==="S")
+						? "CONSEQUÊNCIAS AMBIENTAIS"
+						: (D2==="S" && E2==="N" && F2==="N"&& G2==="S")
+							? "CONSEQUÊNCIAS OPERACIONAIS"
+							: (D2==="S" && E2==="N" && F2==="N" && G2==="N")
+								? "CONSEQUÊNCIAS NÃO OPERACIONAIS"
+								: "";
+
+		r.TAREFA_PROPOSTA =
+			(I2==="S")
+				? "TAREFA SOB-CONDIÇÃO"
+				: (J2==="S")
+					? "TAREFA DE RESTAURAÇÃO PROGRAMADA"
+					: (K2==="S")
+						? "TAREFA DE DESCARTE PROGRAMADO"
+						: (L2==="S")
+							? "TAREFA DE BUSCA DE FALHA PROGRAMADA"
+							: (M2==="S" || N2==="N")
+								? "É OBRIGATÓRIO REPROJETAR"
+								: (N2==="S")
+									? "COMBINAÇÃO DE TAREFAS"
+									: (M2==="N" || K2==="N")
+										? "NENHUMA MANUTENÇÃO PROGRAMADA / REPROJETO PODE SER DESEJÁVEL"
+										: "";
+							
+		return r;
+	};
+
+	var pathWay = function(id, track) {
+		// debugger;
+    console.log(id);
+    track.unshift(id);
+    var p = id.split('__');
+    var nn = p[0][1];
+    var l = p[0][0];
+
+    var n = !nn ? 0 : parseInt(nn,10);
+
+    $('#'.concat(id)).css({opacity:''});
+		if(p[1]==='H6') {
+	    $('#H7').css({opacity:''});
+	    $('#H6__H7').css({opacity:''});
+		} else if(p[1]==='O4') {
+	    $('#O5').css({opacity:''});
+	    $('#O4__O5').css({opacity:''});
+		} else if(p[1]==='N4') {
+	    $('#N5').css({opacity:''});
+	    $('#N4__N5').css({opacity:''});
+		}
+    $('#'.concat(p[1])).css({opacity:''});
+    $('#'.concat(p[0])).css({opacity:''});
+
+    if(!n) {
+        if(l==='O') l = 'E'; 
+        else if(l==='E') l = 'S'; 
+        else if(l==='S') l = 'H';
+        else if(l==='H') return;
+        n = '';
+    } else if(n === 1) {
+        if(l==='N') l = 'O'; 
+        //else if(l==='O') l = 'O'; 
+        else if(l==='E') l = 'S'; 
+        //else if(l==='S') l = 'S';
+        //else if(l==='H') l = 'H';
+        n = '';
+    } else if(n > 1) {
+        --n;
+    } else {
+        return;
+    }
+    pathWay(l.concat(n.toString(), '__', p[0]), track);
+	};
+
+	var svg = d3.select("svg");
+
+	var track = [];
+	
+	var handle = function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		// console.log(e.currentTarget.parentNode.id);
+		$('[id]').css({opacity:0.3});
+		track.length = 0;
+		pathWay(e.currentTarget.parentNode.id, track);
+		
+		if(track.slice(-1)[0] === 'H5__H6') track.push('H6__H7');
+		else if(track.slice(-1)[0] === 'O3__O4') track.push('O4__O5');
+		else if(track.slice(-1)[0] === 'N3__N4') track.push('N4__N5');
+
+		var j = track
+	    .reduce( 
+  	      function(rdc,x) {
+    	        var w = x.split('__');
+	            rdc.push(w);
+	            return rdc;
+  	      }, 
+    	    []
+	    )
+  	  .flat();
+		var jj = Array.from(new Set(j));
+		// console.log(track)
+return;
+		var data2 = {
+    	nodes: data.nodes.filter(function(x) { return ~jj.indexOf(x.id); }),
+  	  map: jj.map(function(x) { return [x]; }),
+			links: data.links
+				.filter(function(x) { return ~track.indexOf(x.source.concat('__', x.target)); })
+				.map(function(x) {
+					return {
+						source: x.source, 
+						target: x.target, 
+						label: !x.label ? undefined : { 
+							name: x.label.name, 
+							dy: 30,
+							dx: 30
+						}
+					};
+				})
+		}
+		// console.log(JSON.stringify(data2,null,2));
+		svg.selectAll('*').remove();
+		var flowcharty2 = new Flowcharty.default();
+		flowcharty2.nodeRX = 7;
+		flowcharty2.nodeRY = 7;
+		flowcharty2.nodeFillColor = "#000";
+		flowcharty2.render(svg, data2);
+		
+		// console.log(decision(track, data2.links));
+		setTimeout(function() {
+			alert(JSON.stringify(decision(track, data2.links),null,2));
+			window.location.reload();
+		}, 500);
+	};
+
+	svg.selectAll('*').remove();
+
+  var flowcharty = new Flowcharty.default();
+
+  flowcharty.nodeRX = 7;
+  flowcharty.nodeRY = 7;
+  flowcharty.nodeFillColor = "#000";
+  flowcharty.render(svg, data);
+  //document.getElementsByClassName('flowchartyCanvas')[0].setAttribute('transform','scale(1)')
+  
+	svg.attr("viewBox", [0, 0, vw, vh]);
+      
+	gg = svg.selectAll("g.flowchartyCanvas").data([[0,0]])
+      .attr("transform", d => `scale(1) translate(${d})`);
+
+	zoomed= function () {
+			var {transform} = d3.event;
+	//console.log(transform);
+			gg.attr("transform", d => `scale(${transform.k}) translate(${transform.apply(d)})`);
+	}
+
+  svg.call(d3.zoom()
+      .extent([[0, 0], [vw, vh]])
+      .scaleExtent([0.5, 2.5])
+      .on("zoom", zoomed));
+      
+  $('svg g g>text').on('click', handle);
+      
+</script>
+</body>
+</html>
+
+<!--
+azul = #5B9BD5 (91,155,213)
+vermelho = #F32100 (243,33,0)
+verde = #70AD47 (112,173,71)
+amarelo = #F6C002 (246,192,2)
+
+-->

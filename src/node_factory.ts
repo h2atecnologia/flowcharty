@@ -1,5 +1,5 @@
-import {FlowchartySettings} from "./settings";
-import {FlowchartyNode, FlowchartyNodeLabel, FlowchartyNodeStyle} from "./node";
+import { FlowchartySettings } from "./settings";
+import { FlowchartyNode, FlowchartyNodeLabel, FlowchartyNodeStyle } from "./node";
 
 export class FlowchartyNodeFactory {
   constructor(private _settings: FlowchartySettings) {
@@ -8,7 +8,7 @@ export class FlowchartyNodeFactory {
   public create(node: {
     id: string,
     style?: {
-      shape?: "circle"|"rect",
+      shape?: "circle" | "rect",
       width?: number,
       height?: number,
       rx?: number,
@@ -21,7 +21,7 @@ export class FlowchartyNodeFactory {
       name: string,
       dx?: number,
       dy?: number,
-      textAnchor?: "start"|"middle"|"end",
+      textAnchor?: "start" | "middle" | "end",
       color?: string,
       fontSize?: string,
       fontFamily?: string
@@ -31,7 +31,7 @@ export class FlowchartyNodeFactory {
   }
 
   private createStyle(nodeStyle: {
-    shape?: "circle"|"rect",
+    shape?: "circle" | "rect",
     width?: number,
     height?: number,
     rx?: number,
@@ -39,7 +39,7 @@ export class FlowchartyNodeFactory {
     strokeWidth?: number,
     strokeColor?: string,
     fillColor?: string
-  }|undefined): FlowchartyNodeStyle {
+  } | undefined): FlowchartyNodeStyle {
     let style: FlowchartyNodeStyle;
     if (nodeStyle) {
       style = new FlowchartyNodeStyle(
@@ -71,7 +71,7 @@ export class FlowchartyNodeFactory {
     name: string,
     dx?: number,
     dy?: number,
-    textAnchor?: "start"|"middle"|"end",
+    textAnchor?: "start" | "middle" | "end",
     color?: string,
     fontSize?: string,
     fontFamily?: string

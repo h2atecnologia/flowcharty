@@ -4,7 +4,7 @@
   "description": "flowchart with d3.js",
   "main": "./lib/flowcharty.js",
   "scripts": {
-    "build": "rimraf lib/**/* && parcel build --no-cache ./src/flowcharty.ts -d ./lib -o flowcharty.js --global Flowcharty",
+    "build": "rimraf lib/**/* && parcel build --no-cache ./src/flowcharty.ts -d ./lib -o flowcharty.js --no-source-maps --global Flowcharty",
     "debug": "rimraf dist/**/* && parcel ./debug/index.html --open"
   },
   "repository": {
